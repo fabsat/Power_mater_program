@@ -94,18 +94,18 @@ int main(void)
         {
             
             buf = my_adresh & bit_mask;
-        
+            buf = buf >> 7;
             ad_value |= (int)buf;
             
             if (i < 7)
             {
                 ad_value << 1;
             }
-            
+            my_adresh = my_adresh << 1;
+                    
         }
         for(j = 0; i < 2; i++)
         {
-            bit_mask = 0b10000000;
             
             buf = my_adresl & bit_mask;
             buf = buf >> 7;
@@ -114,6 +114,7 @@ int main(void)
             {
                 ad_value << 1; 
             }
+            my_adresl = my_adresl << 1;
         }
         ad_value2 = ad_value * 5.00 / range;
         
