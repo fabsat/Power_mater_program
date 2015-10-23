@@ -61,8 +61,7 @@ int main(void)
     int ad_value = 0x00;
     char ad_value2;
     char bit_mask = 0b10000000;
-    char my_adresh;
-    char my_adresl;
+    
     char buf = 0x00;
     int i, j;
     
@@ -88,26 +87,24 @@ int main(void)
             ;
         }
         
-        my_adresh = ADRESH;
-        my_adresl = ADRESL;
         for(i = 0; i < 8; i++)
         {
             
-            buf = my_adresh & bit_mask;
+            buf = ADRESH & bit_mask;
         
+            buf = buf >> 7;
             ad_value |= (int)buf;
-            
             if (i < 7)
             {
                 ad_value << 1;
             }
-            
+            bit_mask = bit_mask >>  1;
         }
         for(j = 0; i < 2; i++)
         {
             bit_mask = 0b10000000;
             
-            buf = my_adresl & bit_mask;
+            buf = ADRESL & bit_mask;
             buf = buf >> 7;
             ad_value |= (int)buf;
             if (i < 1)
