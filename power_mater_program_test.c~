@@ -41,13 +41,13 @@ void ad_init(void)
     TRISC = 0b10000000;     // RC7??
                             // RC6??
     
-    OSCCON = (OSCCON | CLOCK_SET);
-    INTCON = 0b01000000;
+    OSCCON  = (OSCCON | CLOCK_SET);
+    INTCON  = 0b01000000;
     CM1CON0 = 0;
     CM2CON0 = 0;
-    ANSEL = 0b00000110;
-    ANSELH = 0;
-    ADCON1 = 0b00010000;
+    ANSEL   = 0b00000110;
+    ANSELH  = 0;
+    ADCON1  = 0b00000000;
     
 }
 
@@ -72,9 +72,11 @@ int main(void)
     initUART();             // ????????????
     
     __delay_ms(1000);
-    printf("Press a key:\r\n");
+    printf("Start Program:\r\n");
     
-    for(;;)
+    
+    
+    while(1)
     {
         __delay_ms(1000);
         
@@ -83,27 +85,27 @@ int main(void)
         ADCON0bits.GO = 1;
         
         while(ADCON0bits.GO_DONE)
-        
         {
             ;
         }
         
         my_adresh = ADRESH;
         my_adresl = ADRESL;
+        
+        printf("my_adresh = %d, my_adresl = %d\r\n", my_adresh, my_adresl);
+        
         for(i = 0; i < 8; i++)
         {
-            
             buf = my_adresh & bit_mask;
             buf = buf >> 7;
             ad_value |= (int)buf;
+            printf("%d: ad_value = 0x%x\r\n", i, ad_value);
+            ad_value << 1;
             
-            if (i < 7)
-            {
-                ad_value << 1;
-            }
             my_adresh = my_adresh << 1;
-                    
         }
+        
+        
         for(j = 0; i < 2; i++)
         {
             
@@ -116,6 +118,8 @@ int main(void)
             }
             my_adresl = my_adresl << 1;
         }
+        printf("ad_value = 0x%x\r\n", ad_value);
+        
         ad_value2 = ad_value * 5.00 / range;
         
         printf("AD2 = %.2f [V]\r\n", ad_value2);

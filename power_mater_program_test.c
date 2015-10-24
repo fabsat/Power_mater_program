@@ -58,12 +58,13 @@ int main(void)
     const unsigned int range = 0x3ff;
     
     /* AD value */
-    int ad_value = 0x00;
+    int  ad_value = 0x00;
     char ad_value2;
     char bit_mask = 0b10000000;
     char my_adresh;
     char my_adresl;
     char buf = 0x00;
+    int  buf2;
     int i, j;
     
     
@@ -91,20 +92,23 @@ int main(void)
         
         my_adresh = ADRESH;
         my_adresl = ADRESL;
-        
         printf("my_adresh = %d, my_adresl = %d\r\n", my_adresh, my_adresl);
         
         for(i = 0; i < 8; i++)
         {
+            buf2 = 0;
             buf = my_adresh & bit_mask;
             buf = buf >> 7;
-            ad_value |= (int)buf;
-            printf("%d: ad_value = 0x%x\r\n", i, ad_value);
-            ad_value << 1;
+            buf2 = (int)buf;
+            
+            ad_value |= buf2;
+           
+            ad_value = ad_value << 1;
             
             my_adresh = my_adresh << 1;
         }
         
+        printf("ad_value = 0x%x\r\n", ad_value);
         
         for(j = 0; i < 2; i++)
         {
@@ -114,7 +118,7 @@ int main(void)
             ad_value |= (int)buf;
             if (i < 1)
             {
-                ad_value << 1; 
+                ad_value = ad_value << 1; 
             }
             my_adresl = my_adresl << 1;
         }
